@@ -17,19 +17,21 @@ export class BlogPostsService {
     return createdPost.save();
   }
 
-  findAll(): Promise<BlogPost[]> {
+  async findAll(): Promise<BlogPost[]> {
     return this.blogPostModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} blogPost`;
+  async findOne(id: string): Promise<BlogPost> {
+    return this.blogPostModel.findOne({ _id: id }).exec();
   }
 
-  update(id: number, updateBlogPostDto: UpdateBlogPostDto) {
-    return `This action updates a #${id} blogPost`;
+  async update(id: string, updateBlogPostDto: UpdateBlogPostDto): Promise<BlogPost> {
+    return this.blogPostModel.findByIdAndUpdate({ _id: id }, updateBlogPostDto, { new: true }).exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} blogPost`;
+  async remove(id: string): Promise<BlogPost> {
+    const deletedPost = await this.blogPostModel.findByIdAndDelete({ _id: id }).exec();
+
+    return deletedPost;
   }
 }
